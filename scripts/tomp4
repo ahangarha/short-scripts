@@ -1,0 +1,12 @@
+# This script is a Free Software
+#
+# This script makes it easier to convert video files to mp4 format. It depends
+# on HandBrake project.
+#
+# Copyright 2022 by Mostafa Ahangarha <ahangarha@riseup.net>
+#
+# @license GPL-3.0+ <https://www.gnu.org/licenses/>
+
+#! /usr/bin/bash
+
+HandBrakeCLI -i "$1" -o "$1".mp4

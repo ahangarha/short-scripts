@@ -1,0 +1,54 @@
+# This script is a Free Software
+#
+# This script take a video and an audio and replaces the audio in the video
+# with the given audio. This Script relies on ffmpeg.
+#
+# Copyright 2021 by Mostafa Ahangarha <ahangarha@riseup.net>
+#
+# @license GPL-3.0+ <https://www.gnu.org/licenses/>
+
+#!/usr/bin/env python3
+"""
+This script will take two arguments: video and audio file names
+It will replace the audio in the video file and save the new file in the same
+directory with video name with a '-clean' suffix before the extension.
+"""
+
+import sys
+import subprocess
+import re
+
+ARGS = sys.argv
+
+if len(ARGS) == 2 and ARGS[1] in ('-h', '--help'):
+    print("""Usage: audio-replace [OPTION] [VIDEO FILE] [AUDIO FILE]
+
+This command makes a new video file based on the video of VIDEO FILE and audio
+from AUDIO FILE. The new video file will be saved in the same file name as the
+VIDEO FILE plus a suffix of "-clean". For example if the video file name is
+"video_file.mp4" then the new video would be names as video_file-clean.mp4".
+
+Option:
+  -h, --help        show help
+          """)
+    sys.exit(0)
+elif len(ARGS) < 3:
+    print("Two arguments are needed which are not satisfied!")
+    sys.exit(1)
+elif len(ARGS) > 3:
+    print("More than two arguments are provided!")
+    sys.exit(1)
+
+VIDEO_FILE = ARGS[1]
+AUDIO_FILE = ARGS[2]
+
+(filename, extension) = re.findall(r'^(.+)\.([^.]+)$', VIDEO_FILE)[0]
+
+video_clean_file = "{}-clean.{}".format(filename, extension)
+
+command = "ffmpeg -i '{}' -i '{}' -c:v copy -map 0:v:0 -map 1:a:0 '{}'".format(
+    VIDEO_FILE,
+    AUDIO_FILE,
+    video_clean_file)
+
+subprocess.run(command, shell=True)

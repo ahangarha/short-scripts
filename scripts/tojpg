@@ -1,0 +1,30 @@
+# This script is a Free Software
+#
+# This script makes it easier to conver (multiple) images into jpeg
+#
+# Copyright 2021 by Mostafa Ahangarha <ahangarha@riseup.net>
+#
+# @license GPL-3.0+ <https://www.gnu.org/licenses/>
+
+#!/usr/bin/env python3
+
+import sys
+import subprocess
+import re
+
+args = sys.argv
+
+if len(args) < 2:
+    print("Not enough arguments!")
+    exit(1)
+
+# get files
+args = args[1:]
+
+for input_file in args:
+    # get filename by excluding extension
+    filename = re.findall(r"^(.+)\.[^\.]+$", input_file)[0]
+    #new filename
+    output_file = filename + ".jpg"
+    command = "convert '{}' '{}'".format(input_file, output_file)
+    subprocess.run(command, shell=True)
